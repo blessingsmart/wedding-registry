@@ -41,48 +41,55 @@ async function fetchSettings() {
 }
 
 function renderSettings(settings) {
+  if (!settings) return;
   const couple = settings.couple || {};
   const bank = settings.bankTransfer || {};
   const paystack = settings.paystack || {};
 
   // Names & Details
-  if (couple.bride && document.getElementById('heroBride')) {
-    document.getElementById('heroBride').textContent = couple.bride;
-  }
-  if (couple.groom && document.getElementById('heroGroom')) {
-    document.getElementById('heroGroom').textContent = couple.groom;
-  }
-  if (couple.story && document.getElementById('welcomeStory')) {
-    document.getElementById('welcomeStory').textContent = couple.story;
-  }
-  if (couple.venueName && document.getElementById('churchName')) {
-    document.getElementById('churchName').textContent = couple.venueName;
-  }
-  if (couple.venueField && document.getElementById('churchField')) {
-    document.getElementById('churchField').textContent = couple.venueField;
-  }
-  if (couple.venueDistrict && document.getElementById('churchDistrict')) {
-    document.getElementById('churchDistrict').textContent = couple.venueDistrict;
-  }
-  if (couple.venueAddress && document.getElementById('churchAddress')) {
-    document.getElementById('churchAddress').textContent = couple.venueAddress;
-  }
+  const heroBride = document.getElementById('heroBride');
+  if (heroBride && couple.bride) heroBride.textContent = couple.bride;
+
+  const heroGroom = document.getElementById('heroGroom');
+  if (heroGroom && couple.groom) heroGroom.textContent = couple.groom;
+
+  const welcomeStory = document.getElementById('welcomeStory');
+  if (welcomeStory && couple.story) welcomeStory.textContent = couple.story;
+
+  const churchName = document.getElementById('churchName');
+  if (churchName && couple.venueName) churchName.textContent = couple.venueName;
+
+  const churchField = document.getElementById('churchField');
+  if (churchField && couple.venueField) churchField.textContent = couple.venueField;
+
+  const churchDistrict = document.getElementById('churchDistrict');
+  if (churchDistrict && couple.venueDistrict) churchDistrict.textContent = couple.venueDistrict;
+
+  const churchAddress = document.getElementById('churchAddress');
+  if (churchAddress && couple.venueAddress) churchAddress.textContent = couple.venueAddress;
 
   // Bank Info
-  if (bank.bankName) {
-    document.getElementById('displayBankName').textContent = bank.bankName;
-    document.getElementById('modalBankName').textContent = bank.bankName;
-  }
-  if (bank.accountNumber) {
-    document.getElementById('displayAccountNumber').textContent = bank.accountNumber;
-    document.getElementById('modalAccNumber').textContent = bank.accountNumber;
-  }
-  if (bank.accountName) {
-    document.getElementById('displayAccountName').textContent = bank.accountName;
-    document.getElementById('modalAccName').textContent = bank.accountName;
-  }
-  if (bank.instructions && document.getElementById('displayInstructions')) {
-    document.getElementById('displayInstructions').innerHTML = `<i class="fa-solid fa-circle-info"></i> ${bank.instructions}`;
+  const displayBankName = document.getElementById('displayBankName');
+  if (displayBankName && bank.bankName) displayBankName.textContent = bank.bankName;
+
+  const modalBankName = document.getElementById('modalBankName');
+  if (modalBankName && bank.bankName) modalBankName.textContent = bank.bankName;
+
+  const displayAccountNumber = document.getElementById('displayAccountNumber');
+  if (displayAccountNumber && bank.accountNumber) displayAccountNumber.textContent = bank.accountNumber;
+
+  const modalAccNumber = document.getElementById('modalAccNumber');
+  if (modalAccNumber && bank.accountNumber) modalAccNumber.textContent = bank.accountNumber;
+
+  const displayAccountName = document.getElementById('displayAccountName');
+  if (displayAccountName && bank.accountName) displayAccountName.textContent = bank.accountName;
+
+  const modalAccName = document.getElementById('modalAccName');
+  if (modalAccName && bank.accountName) modalAccName.textContent = bank.accountName;
+
+  const displayInstructions = document.getElementById('displayInstructions');
+  if (displayInstructions && bank.instructions) {
+    displayInstructions.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${bank.instructions}`;
   }
 
   // Paystack Status
@@ -250,8 +257,9 @@ function initCountdown() {
     const now = new Date().getTime();
     const distance = targetDate - now;
 
-    if (distance < 0) {
-      document.getElementById('countdownGrid').innerHTML = '<h3 style="color: #278345;">Today is the Day! Hallelujah! 💍</h3>';
+    if (isNaN(distance) || distance < 0) {
+      const grid = document.getElementById('countdownGrid');
+      if (grid) grid.innerHTML = '<h3 style="color: #721b2c;">Today is the Day! Hallelujah! 💍</h3>';
       return;
     }
 
@@ -260,12 +268,17 @@ function initCountdown() {
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    const pad = (n) => String(n).padStart(2, '0');
+    const pad = (n) => String(isNaN(n) ? '00' : n).padStart(2, '0');
 
-    if (document.getElementById('days')) document.getElementById('days').textContent = pad(days);
-    if (document.getElementById('hours')) document.getElementById('hours').textContent = pad(hours);
-    if (document.getElementById('minutes')) document.getElementById('minutes').textContent = pad(minutes);
-    if (document.getElementById('seconds')) document.getElementById('seconds').textContent = pad(seconds);
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    if (daysEl) daysEl.textContent = pad(days);
+    if (hoursEl) hoursEl.textContent = pad(hours);
+    if (minutesEl) minutesEl.textContent = pad(minutes);
+    if (secondsEl) secondsEl.textContent = pad(seconds);
   }
 
   update();
@@ -657,4 +670,107 @@ function initNavbar() {
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', () => {
         navLinks.classList.remove('open');
-  
+      });
+    });
+  }
+}
+
+// =========================================================
+// HERO PHOTO CAROUSEL LOGIC
+// =========================================================
+let currentHeroSlide = 0;
+let carouselTimer = null;
+const totalHeroSlides = 6;
+let isCarouselPaused = false;
+
+function initHeroCarousel() {
+  const carouselEl = document.getElementById('heroCarousel');
+  if (!carouselEl) return;
+
+  startCarouselTimer();
+  setupCarouselTouch(carouselEl);
+}
+
+function startCarouselTimer() {
+  if (carouselTimer) clearInterval(carouselTimer);
+  carouselTimer = setInterval(() => {
+    if (!isCarouselPaused) {
+      nextSlide();
+    }
+  }, 4500);
+}
+
+function pauseCarousel() {
+  isCarouselPaused = true;
+}
+
+function resumeCarousel() {
+  isCarouselPaused = false;
+}
+
+function goToSlide(index) {
+  if (index < 0) index = totalHeroSlides - 1;
+  if (index >= totalHeroSlides) index = 0;
+
+  currentHeroSlide = index;
+
+  // Update Slides
+  const slides = document.querySelectorAll('.carousel-slide');
+  slides.forEach((slide, i) => {
+    slide.classList.toggle('active', i === currentHeroSlide);
+  });
+
+  // Update Indicator Dots
+  const dots = document.querySelectorAll('.carousel-dots .dot');
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentHeroSlide);
+  });
+
+  // Update Thumbnails
+  const thumbs = document.querySelectorAll('.carousel-thumbnails .thumb');
+  thumbs.forEach((thumb, i) => {
+    thumb.classList.toggle('active', i === currentHeroSlide);
+  });
+
+  // Update Counter
+  const counterEl = document.getElementById('currentSlideNum');
+  if (counterEl) {
+    counterEl.textContent = currentHeroSlide + 1;
+  }
+}
+
+function nextSlide() {
+  goToSlide((currentHeroSlide + 1) % totalHeroSlides);
+}
+
+function prevSlide() {
+  goToSlide((currentHeroSlide - 1 + totalHeroSlides) % totalHeroSlides);
+}
+
+// Mobile Touch Swipe Handling
+function setupCarouselTouch(element) {
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  element.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    pauseCarousel();
+  }, { passive: true });
+
+  element.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+    resumeCarousel();
+  }, { passive: true });
+
+  function handleSwipe() {
+    const diff = touchEndX - touchStartX;
+    if (Math.abs(diff) > 45) {
+      if (diff < 0) {
+        nextSlide(); // swipe left
+      } else {
+        prevSlide(); // swipe right
+      }
+    }
+  }
+}
