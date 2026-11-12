@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clara & Ezekiel — Wedding Registry & Gift Fund</title>
+  <meta name="description" content="Wedding gift registry and celebration website for Clara Napoleon Akpan and Ezekiel Asuquo Ikoh. 29th December 2026.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Alex+Brush&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Paystack Inline JS (Ready for toggle) -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-announcement">
+    <div class="container announcement-inner">
+      <span>🌸 Celebrating the holy matrimony of <strong>Clara Napoleon Akpan &amp; Ezekiel Asuquo Ikoh</strong></span>
+      <span class="announcement-date"><i class="fa-regular fa-calendar-days"></i> 29th December 2026</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="site-header" id="navbar">
+    <div class="container header-container">
+      <a href="#hero" class="brand-monogram">
+        <span class="monogram-symbol">C <span class="knot">&amp;</span> E</span>
+        <span class="monogram-tag">29.12.2026</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#hero" class="nav-link active">Home</a>
+        <a href="#about" class="nav-link">Our Wedding</a>
+        <a href="#bank-transfer" class="nav-link highlight">Bank Transfer</a>
+        <a href="#registry" class="nav-link">Gift Registry</a>
+        <a href="#guestbook" class="nav-link">Guestbook</a>
+        <a href="/admin" class="nav-link admin-pill"><i class="fa-solid fa-lock"></i> Admin</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#registry" class="btn btn-primary btn-sm">Bless the Couple</a>
+        <button class="hamburger-btn" id="mobileMenuBtn" aria-label="Toggle Navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="hero-split-grid">
+        <!-- Text & Countdown Column -->
+        <div class="hero-text-side">
+          <div class="botanical-badge">
+            <span class="ribbon-knot">∞</span>
+            <span class="badge-text">SAVE THE DATE</span>
+          </div>
+
+          <h1 class="couple-names">
+            <span class="bride-name" id="heroBride">Clara Napoleon Akpan</span>
+            <span class="ampersand">&amp;</span>
+            <span class="groom-name" id="heroGroom">Ezekiel Asuquo Ikoh</span>
+          </h1>
+
+          <div class="wedding-tagline">
+            <span class="ceremony-rule"></span>
+            <span class="ceremony-text">WEDDING CEREMONY</span>
+            <span class="ceremony-rule"></span>
+          </div>
+
+          <div class="event-highlights">
+            <div class="event-pill">
+              <i class="fa-regular fa-calendar-check"></i>
+              <span>Tuesday, 29th December 2026</span>
+            </div>
+            <div class="event-pill">
+              <i class="fa-solid fa-location-dot"></i>
+              <span>The Apostolic Church Nigeria, Ekim Town</span>
+            </div>
+          </div>
+
+          <!-- Live Countdown Clock -->
+          <div class="countdown-wrap">
+            <p class="countdown-title">COUNTING DOWN TO OUR SPECIAL DAY</p>
+            <div class="countdown-grid" id="countdownGrid">
+              <div class="time-box">
+                <span class="number" id="days">00</span>
+                <span class="label">Days</span>
+              </div>
+              <div class="time-box">
+                <span class="number" id="hours">00</span>
+                <span class="label">Hours</span>
+              </div>
+              <div class="time-box">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Minutes</span>
+              </div>
+              <div class="time-box">
+                <span class="number" id="seconds">00</span>
+                <span class="label">Seconds</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-cta-group">
+            <a href="#registry" class="btn btn-primary btn-lg">
+              <i class="fa-solid fa-gift"></i> Browse Wishlist &amp; Registry
+            </a>
+            <a href="#bank-transfer" class="btn btn-outline btn-lg">
+              <i class="fa-solid fa-building-columns"></i> Instant Bank Transfer
+            </a>
+          </div>
+        </div>
+
+        <!-- Photo Carousel Column -->
+        <div class="hero-carousel-side">
+          <div class="hero-carousel-card">
+            <div class="carousel-badge-top">
+              <i class="fa-solid fa-heart"></i> Pre-Wedding Gallery
+            </div>
+
+            <div class="hero-carousel" id="heroCarousel" onmouseenter="pauseCarousel()" onmouseleave="resumeCarousel()">
+              <!-- Slide 1 -->
+              <div class="carousel-slide active" data-index="0">
+                <img src="/images/couple-1.jpg" alt="Clara &amp; Ezekiel Pre-wedding Photo 1" class="carousel-img">
+                <div class="carousel-caption">
+                  <span>A Love Story Written by Grace</span>
+                </div>
+              </div>
+
+              <!-- Slide 2 -->
+              <div class="carousel-slide" data-index="1">
+                <img src="/images/couple-2.jpg" alt="Clara &amp; Ezekiel Pre-wedding Photo 2" class="carousel-img">
+                <div class="carousel-caption">
+                  <span>Elegance &amp; Devotion</span>
+                </div>
+              </div>
+
+              <!-- Slide 3 -->
+              <div class="carousel-slide" data-index="2">
+                <img src="/images/couple-3.jpg" alt="Clara &amp; Ezekiel Pre-wedding Photo 3" class="carousel-img">
+                <div class="carousel-caption">
+                  <span>Forever Begins Together</span>
+                </div>
+              </div>
+
+              <!-- Slide 4 -->
+              <div class="carousel-slide" data-index="3">
+                <img src="/images/couple-4.jpg" alt="Clara &amp; Ezekiel Pre-wedding Photo 4" class="carousel-img">
+                <div class="carousel-caption">
+                  <span>Hand in Hand Into Eternity</span>
+                </div>
+              </div>
+
+              <!-- Slide 5 -->
+              <div class="carousel-slide" data-index="4">
+                <img src="/images/couple-5.jpg" alt="Clara &amp; Ezekiel Pre-wedding Photo 5" class="carousel-img">
+                <div class="carousel-caption">
+                  <span>Joyful Celebrations</span>
+                </div>
+              </div>
+
+              <!-- Slide 6 -->
+              <div class="carousel-slide" data-index="5">
+                <img src="/images/couple-6.jpg" alt="Clara &amp; Ezekiel Pre-wedding Photo 6" class="carousel-img">
+                <div class="carousel-caption">
+                  <span>Two Hearts, One Journey</span>
+                </div>
+              </div>
+
+              <!-- Navigation Controls -->
+              <button class="carousel-btn carousel-prev" onclick="prevSlide()" aria-label="Previous Photo">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              <button class="carousel-btn carousel-next" onclick="nextSlide()" aria-label="Next Photo">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+
+              <!-- Counter -->
+              <div class="carousel-counter">
+                <span id="currentSlideNum">1</span> / 6
+              </div>
+            </div>
+
+            <!-- Dots Indicator -->
+            <div class="carousel-dots" id="carouselDots">
+              <button class="dot active" onclick="goToSlide(0)" aria-label="Slide 1"></button>
+              <button class="dot" onclick="goToSlide(1)" aria-label="Slide 2"></button>
+              <button class="dot" onclick="goToSlide(2)" aria-label="Slide 3"></button>
+              <button class="dot" onclick="goToSlide(3)" aria-label="Slide 4"></button>
+              <button class="dot" onclick="goToSlide(4)" aria-label="Slide 5"></button>
+              <button class="dot" onclick="goToSlide(5)" aria-label="Slide 6"></button>
+            </div>
+
+            <!-- Thumbnail Strip -->
+            <div class="carousel-thumbnails" id="carouselThumbs">
+              <img src="/images/couple-1.jpg" alt="Thumb 1" class="thumb active" onclick="goToSlide(0)">
+              <img src="/images/couple-2.jpg" alt="Thumb 2" class="thumb" onclick="goToSlide(1)">
+              <img src="/images/couple-3.jpg" alt="Thumb 3" class="thumb" onclick="goToSlide(2)">
+              <img src="/images/couple-4.jpg" alt="Thumb 4" class="thumb" onclick="goToSlide(3)">
+              <img src="/images/couple-5.jpg" alt="Thumb 5" class="thumb" onclick="goToSlide(4)">
+              <img src="/images/couple-6.jpg" alt="Thumb 6" class="thumb" onclick="goToSlide(5)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / Event Details & Flyer Section -->
+  <section class="section about-section" id="about">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">WITH JOY IN OUR HEARTS</span>
+        <h2 class="section-title">Celebrating Our Love Story</h2>
+        <div class="leaf-divider">
+          <span>🌸</span>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <!-- Official Flyer Card -->
+        <div class="flyer-card-wrapper">
+          <div class="flyer-frame">
+            <img src="/images/wedding-flyer.jpg" alt="Clara Napoleon Akpan and Ezekiel Asuquo Ikoh Wedding Save The Date" class="flyer-img" id="flyerImg">
+            <div class="flyer-badge">Official Invitation Card</div>
+          </div>
+        </div>
+
+        <!-- Details & Welcome Letter -->
+        <div class="about-details-card">
+          <div class="welcome-box">
+            <h3 class="welcome-title">Dear Beloved Friends &amp; Family</h3>
+            <p class="welcome-text" id="welcomeStory">
+              Welcome to our wedding registry! As we celebrate our union and step into our forever journey together, your love, prayers, and heartfelt support mean the world to us. If you wish to honor us with a gift or contribute towards our new beginning, you can browse through our wishlist or bless us with a cash gift. Thank you for celebrating with us!
+            </p>
+          </div>
+
+          <div class="church-venue-box">
+            <div class="venue-icon-circle">
+              <i class="fa-solid fa-church"></i>
+            </div>
+            <div class="venue-info">
+              <span class="venue-label">CHURCH CEREMONY &amp; RECEPTION</span>
+              <h4 class="venue-name" id="churchName">The Apostolic Church Nigeria</h4>
+              <p class="venue-field" id="churchField">Ikot Abasi Field</p>
+              <p class="venue-district" id="churchDistrict">Ekim Town District Headquarters</p>
+              <p class="venue-address" id="churchAddress">Ekim Road, Opposite Ekim Primary School</p>
+            </div>
+          </div>
+
+          <div class="key-features-list">
+            <div class="feature-item">
+              <i class="fa-solid fa-shield-heart"></i>
+              <div>
+                <strong>Curated with Love</strong>
+                <span>Items specifically selected for the couple's new marital home.</span>
+              </div>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-money-bill-wave"></i>
+              <div>
+                <strong>Flexible Contributions</strong>
+                <span>Support any item in full or send any fraction that fits your heart.</span>
+              </div>
+            </div>
+            <div class="feature-item">
+              <i class="fa-solid fa-receipt"></i>
+              <div>
+                <strong>Direct Bank Transfer &amp; Instant Receipt</strong>
+                <span>Direct transfers to the couple with automated notification and WhatsApp confirmation.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bank Transfer Section (Highlight) -->
+  <section class="section bank-section" id="bank-transfer">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">DIRECT &amp; INSTANT GIFTING</span>
+        <h2 class="section-title">Bank Transfer Details</h2>
+        <p class="section-desc">For friends and loved ones who prefer direct electronic bank transfers to bless the couple.</p>
+        <div class="leaf-divider"><span>🌹</span></div>
+      </div>
+
+      <div class="bank-card-container">
+        <div class="nigerian-bank-card">
+          <div class="bank-card-header">
+            <div class="bank-chip"></div>
+            <div class="bank-network-logo"><i class="fa-solid fa-building-columns"></i> Wedding Fund</div>
+          </div>
+
+          <div class="bank-details-body">
+            <div class="detail-group">
+              <span class="detail-label">BANK NAME</span>
+              <span class="detail-value" id="displayBankName">Guaranty Trust Bank (GTBank)</span>
+            </div>
+
+            <div class="detail-group account-number-group">
+              <span class="detail-label">ACCOUNT NUMBER</span>
+              <div class="acc-num-flex">
+                <span class="detail-value acc-number" id="displayAccountNumber">0123456789</span>
+                <button class="btn-copy" id="copyAccBtn" onclick="copyAccountNumber()">
+                  <i class="fa-regular fa-copy"></i> <span id="copyBtnText">Copy</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="detail-group">
+              <span class="detail-label">ACCOUNT NAME</span>
+              <span class="detail-value" id="displayAccountName">Clara Napoleon Akpan &amp; Ezekiel Asuquo Ikoh</span>
+            </div>
+          </div>
+
+          <div class="bank-card-footer">
+            <p class="bank-instructions" id="displayInstructions">
+              <i class="fa-solid fa-circle-info"></i> Please use your <strong>Full Name</strong> as transfer narration. After making the transfer, click below to notify the couple!
+            </p>
+            <div class="bank-actions">
+              <button class="btn btn-gold btn-block" onclick="openDirectTransferModal()">
+                <i class="fa-solid fa-paper-plane"></i> I Have Made a Bank Transfer (Notify Couple)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paystack / Online Payment Coming Soon Banner -->
+        <div class="online-payment-card" id="paystackBanner">
+          <div class="online-pay-icon">
+            <i class="fa-solid fa-credit-card"></i>
+          </div>
+          <div class="online-pay-content">
+            <div class="badge-pill online-badge" id="paystackStatusBadge">Online Payment</div>
+            <h4 id="paystackHeadline">Pay with Card / USSD via Paystack</h4>
+            <p id="paystackExplainer">
+              Online card and USSD processing is ready for Paystack activation. Currently, direct <strong>Bank Transfer</strong> is active and instant!
+            </p>
+          </div>
+          <div class="online-pay-action">
+            <button class="btn btn-outline-dark" onclick="openDirectTransferModal()">Send Gift Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wishlist & Registry Section -->
+  <section class="section registry-section" id="registry">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">CURATED WISHLIST</span>
+        <h2 class="section-title">The Wedding Registry</h2>
+        <p class="section-desc">Select an item below to sponsor or contribute any amount of your choice.</p>
+        <div class="leaf-divider"><span>🌸</span></div>
+      </div>
+
+      <!-- Categories & Filters -->
+      <div class="filter-bar">
+        <div class="filter-categories" id="categoryFilters">
+          <button class="filter-btn active" data-category="all">All Items (<span id="countAll">0</span>)</button>
+          <button class="filter-btn" data-category="Home Appliances">Home Appliances</button>
+          <button class="filter-btn" data-category="Kitchen">Kitchen</button>
+          <button class="filter-btn" data-category="Wedding Support">Wedding Support</button>
+          <button class="filter-btn" data-category="Cash Gifts">Cash Gifts</button>
+        </div>
+
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Search registry items...">
+        </div>
+      </div>
+
+      <!-- Items Grid -->
+      <div class="registry-grid" id="registryGrid">
+        <!-- Rendered dynamically by app.js -->
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Loading registry items...</p>
+        </div>
+      </div>
+
+      <!-- High Rolling Banner for "Plenty Cash" -->
+      <div class="baller-banner">
+        <div class="baller-content">
+          <div class="baller-badge">SPECIAL CELEBRATION FUND</div>
+          <h3>Want to bless the couple with Plenty Cash?</h3>
+          <p>For our wonderful godparents, big ballers, elders, and generous sponsors who want to contribute generously without limits!</p>
+        </div>
+        <div class="baller-action">
+          <button class="btn btn-gold btn-lg" onclick="openItemModal('item_10')">
+            <i class="fa-solid fa-champagne-glasses"></i> Send Plenty Cash
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guestbook / Love Notes Section -->
+  <section class="section guestbook-section" id="guestbook">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">WORDS OF LOVE &amp; BLESSINGS</span>
+        <h2 class="section-title">Wedding Guestbook</h2>
+        <p class="section-desc">Sweet congratulations and warm wishes left for Clara &amp; Ezekiel.</p>
+        <div class="leaf-divider"><span>🌹</span></div>
+      </div>
+
+      <div class="guestbook-wall" id="guestbookWall">
+        <!-- Dynamically loaded -->
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn btn-outline" onclick="openDirectTransferModal()">
+          <i class="fa-regular fa-comment-dots"></i> Leave a Goodwill Message
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <h3>Clara &amp; Ezekiel</h3>
+        <p>#ClaraEzekiel2026 • 29th December 2026</p>
+        <p class="footer-venue">The Apostolic Church Nigeria, Ekim Town, Ikot Abasi Field</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#hero">Home</a>
+        <a href="#about">Our Story</a>
+        <a href="#bank-transfer">Bank Details</a>
+        <a href="#registry">Wishlist</a>
+        <a href="#guestbook">Guestbook</a>
+        <a href="/admin">Admin Login</a>
+      </div>
+
+      <div class="footer-bottom">
+        <p>Built with love for Clara Napoleon Akpan &amp; Ezekiel Asuquo Ikoh. All rights reserved &copy; 2026.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal: Contribution & Transfer Flow -->
+  <div class="modal-backdrop" id="giftModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-header-titles">
+          <span class="modal-eyebrow">MAKE A WEDDING GIFT</span>
+          <h3 class="modal-title" id="modalItemTitle">Contribute to Gift</h3>
+        </div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Item Overview Header -->
+        <div class="modal-item-preview" id="modalItemPreview">
+          <img src="/images/cash.jpg" alt="Item preview" id="modalItemImage" class="modal-item-thumb">
+          <div class="modal-item-details">
+            <h4 id="modalItemName">Air Conditioner</h4>
+            <p class="modal-item-price" id="modalItemPrice">Target: ₦300,000</p>
+            <span class="modal-item-raised" id="modalItemRaised">₦0 raised so far</span>
+          </div>
+        </div>
+
+        <form id="contributionForm" onsubmit="handleContributionSubmit(event)">
+          <input type="hidden" id="formItemId" value="">
+
+          <!-- Amount Selection -->
+          <div class="form-group">
+            <label class="form-label" for="formAmount">Contribution Amount (₦ Naira)</label>
+            <div class="amount-presets" id="amountPresets">
+              <button type="button" class="preset-pill" onclick="setPresetAmount(10000)">₦10,000</button>
+              <button type="button" class="preset-pill" onclick="setPresetAmount(25000)">₦25,000</button>
+              <button type="button" class="preset-pill" onclick="setPresetAmount(50000)">₦50,000</button>
+              <button type="button" class="preset-pill" onclick="setPresetAmount(100000)">₦100,000</button>
+              <button type="button" class="preset-pill" onclick="setFullItemAmount()">Full Amount</button>
+            </div>
+            <div class="input-with-prefix">
+              <span class="input-prefix">₦</span>
+              <input type="number" id="formAmount" min="500" step="500" required placeholder="e.g. 50,000" class="form-control">
+            </div>
+          </div>
+
+          <!-- Guest Details -->
+          <div class="form-row">
+            <div class="form-group col">
+              <label class="form-label" for="formGuestName">Your Full Name *</label>
+              <input type="text" id="formGuestName" required placeholder="e.g. Samuel Okon" class="form-control">
+            </div>
+            <div class="form-group col">
+              <label class="form-label" for="formGuestPhone">WhatsApp / Phone Number</label>
+              <input type="tel" id="formGuestPhone" placeholder="e.g. 08012345678" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formGuestEmail">Email Address (Optional)</label>
+            <input type="email" id="formGuestEmail" placeholder="e.g. name@example.com" class="form-control">
+          </div>
+
+          <!-- Payment Method Choice -->
+          <div class="form-group">
+            <label class="form-label">Payment Method</label>
+            <div class="payment-method-selector">
+              <label class="method-option active" id="methodBankLabel">
+                <input type="radio" name="paymentMethod" value="bank_transfer" checked onchange="togglePaymentTab('bank')">
+                <div class="method-box">
+                  <i class="fa-solid fa-building-columns"></i>
+                  <div>
+                    <strong>Direct Bank Transfer</strong>
+                    <span>Transfer via banking app / USSD</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="method-option" id="methodPaystackLabel">
+                <input type="radio" name="paymentMethod" value="paystack" onchange="togglePaymentTab('paystack')">
+                <div class="method-box">
+                  <i class="fa-solid fa-credit-card"></i>
+                  <div>
+                    <strong>Card / Paystack</strong>
+                    <span id="paystackSubtext">Online payment gateway</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Bank Transfer Guidance Container -->
+          <div class="transfer-notice-box" id="bankTransferBox">
+            <div class="transfer-notice-header">
+              <i class="fa-solid fa-receipt"></i>
+              <strong>Transfer Directly To:</strong>
+            </div>
+            <div class="modal-bank-rows">
+              <div class="m-bank-row">
+                <span>Bank Name:</span>
+                <strong id="modalBankName">Guaranty Trust Bank (GTBank)</strong>
+              </div>
+              <div class="m-bank-row">
+                <span>Account Number:</span>
+                <div class="m-copy-num">
+                  <strong id="modalAccNumber" class="text-primary-dark">0123456789</strong>
+                  <button type="button" class="btn-micro" onclick="copyModalAccountNumber()">Copy</button>
+                </div>
+              </div>
+              <div class="m-bank-row">
+                <span>Account Name:</span>
+                <strong id="modalAccName">Clara Napoleon Akpan &amp; Ezekiel Asuquo Ikoh</strong>
+              </div>
+              <div class="m-bank-row">
+                <span>Suggested Narration:</span>
+                <span class="badge-reference" id="modalReference">CE-2026-REG</span>
+              </div>
+            </div>
+            <p class="small-text-muted mt-2">
+              💡 Please make the transfer from your bank app, then proceed to submit your confirmation below so Clara &amp; Ezekiel can see your love note!
+            </p>
+          </div>
+
+          <!-- Paystack Gateway Guidance Container -->
+          <div class="transfer-notice-box d-none" id="paystackNoticeBox">
+            <div class="paystack-notice-content">
+              <i class="fa-solid fa-shield-halved text-success"></i>
+              <div>
+                <strong>Secure Paystack Gateway</strong>
+                <p id="paystackInfoNotice">Paystack is configured. When you click proceed, you'll complete payment securely using your Debit Card, USSD, or Bank Transfer.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Goodwill Note -->
+          <div class="form-group mt-3">
+            <label class="form-label" for="formMessage">Congratulations Note / Love Message for the Couple ❤️</label>
+            <textarea id="formMessage" rows="3" class="form-control" placeholder="Write a warm congratulatory wish or prayer for Clara and Ezekiel..."></textarea>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="modal-footer-btns">
+            <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="submitGiftBtn">
+              <i class="fa-solid fa-check-circle"></i> I Have Sent My Gift (Confirm)
+            </button>
+          </div>
+        </form>
+
+        <!-- Success View (Shown after submission) -->
+        <div class="success-view d-none" id="successView">
+          <div class="success-icon-wrap">
+            <i class="fa-solid fa-heart-circle-check"></i>
+          </div>
+          <h3 class="success-title">Thank You So Much!</h3>
+          <p class="success-msg" id="successMessage">Your contribution and goodwill message have been registered.</p>
+
+          <div class="success-summary" id="successSummary">
+            <!-- Rendered by JS -->
+          </div>
+
+          <div class="success-actions">
+            <a href="#" target="_blank" id="whatsappNotifyLink" class="btn btn-whatsapp btn-block">
+              <i class="fa-brands fa-whatsapp"></i> Send Proof &amp; Wish on WhatsApp
+            </a>
+            <button class="btn btn-outline btn-block mt-2" onclick="closeModal()">
+              Back to Registry
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Logic -->
+  <script src="js/app.js"></script>
+</body>
+</html>

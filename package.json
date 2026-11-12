@@ -1,0 +1,24 @@
+{
+  "name": "clara-ezekiel-wedding-registry",
+  "version": "1.0.0",
+  "description": "Wedding Registry and Gift Contribution Platform for Clara Napoleon Akpan & Ezekiel Asuquo Ikoh",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "wedding",
+    "registry",
+    "nigeria",
+    "paystack",
+    "bank-transfer"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}

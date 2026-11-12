@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — Clara & Ezekiel Wedding Registry</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Admin Stylesheet -->
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- Login Modal / Screen -->
+  <div class="login-wrapper" id="loginScreen">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="monogram-symbol">C &amp; E</span>
+        <h2>Registry Admin Portal</h2>
+        <p>Please enter your access PIN to manage items and view donations.</p>
+      </div>
+
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group">
+          <label for="loginPin">Security PIN</label>
+          <div class="pin-input-wrap">
+            <input type="password" id="loginPin" required placeholder="Enter 4-digit PIN (default: 2026)" autocomplete="off">
+            <button type="button" class="btn-toggle-eye" onclick="togglePinVisibility()"><i class="fa-regular fa-eye"></i></button>
+          </div>
+          <small class="text-muted">Default access PIN: <strong>2026</strong></small>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">
+          <i class="fa-solid fa-lock-open"></i> Unlock Dashboard
+        </button>
+        <div class="login-error text-danger d-none" id="loginError">Incorrect PIN. Please try again.</div>
+      </form>
+
+      <div class="login-footer">
+        <a href="/" class="back-link"><i class="fa-solid fa-arrow-left"></i> Return to Registry Website</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Main Dashboard (Shown when logged in) -->
+  <div class="admin-app d-none" id="adminApp">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span class="brand-monogram">C &amp; E</span>
+          <div class="brand-text">
+            <h3>Registry Admin</h3>
+            <span class="badge-role">Couple Portal</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="items" onclick="switchTab('items')">
+          <i class="fa-solid fa-gifts"></i> <span>Registry Items</span>
+        </button>
+        <button class="nav-item" data-tab="contributions" onclick="switchTab('contributions')">
+          <i class="fa-solid fa-hand-holding-dollar"></i> <span>Contributions &amp; Notes</span>
+          <span class="sidebar-counter" id="unreadCount">0</span>
+        </button>
+        <button class="nav-item" data-tab="bank" onclick="switchTab('bank')">
+          <i class="fa-solid fa-building-columns"></i> <span>Bank &amp; Payment Settings</span>
+        </button>
+        <button class="nav-item" data-tab="wedding" onclick="switchTab('wedding')">
+          <i class="fa-solid fa-heart"></i> <span>Wedding &amp; Security</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="/" target="_blank" class="sidebar-action-link">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Website
+        </a>
+        <button class="sidebar-logout-btn" onclick="adminLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main">
+      <!-- Top Bar -->
+      <header class="admin-topbar">
+        <div class="topbar-title">
+          <h2 id="currentTabTitle">Registry Items</h2>
+          <span class="text-muted" id="topbarSubtitle">Add, edit, or customize gifts and target amounts.</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline btn-sm" onclick="fetchDashboardData()">
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+          <a href="/" target="_blank" class="btn btn-gold btn-sm">
+            <i class="fa-solid fa-eye"></i> View Live Site
+          </a>
+        </div>
+      </header>
+
+      <!-- Stats Overview Row -->
+      <section class="stats-overview">
+        <div class="stat-card">
+          <div class="stat-icon bg-green"><i class="fa-solid fa-gift"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Wishlist Items</span>
+            <h3 class="stat-val" id="statItemCount">10</h3>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon bg-gold"><i class="fa-solid fa-hand-holding-heart"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Contributions</span>
+            <h3 class="stat-val" id="statDonationCount">0</h3>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon bg-emerald"><i class="fa-solid fa-coins"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Total Raised / Pledged</span>
+            <h3 class="stat-val" id="statTotalRaised">₦0</h3>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon bg-blue"><i class="fa-solid fa-shield-check"></i></div>
+          <div class="stat-info">
+            <span class="stat-label">Payment Gateway</span>
+            <h3 class="stat-val status-val" id="statPaystackStatus">Bank Transfer</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 1: REGISTRY ITEMS -->
+      <section class="tab-pane active" id="tabItems">
+        <div class="pane-header">
+          <div class="search-filter-row">
+            <input type="text" id="adminItemSearch" placeholder="Search items..." oninput="filterAdminItems()" class="form-control admin-search">
+            <select id="adminCategoryFilter" onchange="filterAdminItems()" class="form-control admin-filter">
+              <option value="all">All Categories</option>
+              <option value="Home Appliances">Home Appliances</option>
+              <option value="Kitchen">Kitchen</option>
+              <option value="Wedding Support">Wedding Support</option>
+              <option value="Cash Gifts">Cash Gifts</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="openAddItemModal()">
+            <i class="fa-solid fa-plus"></i> Add New Registry Item
+          </button>
+        </div>
+
+        <!-- Items Table -->
+        <div class="admin-card">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Item Title</th>
+                  <th>Category</th>
+                  <th>Target Price</th>
+                  <th>Raised So Far</th>
+                  <th>Status</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminItemsTableBody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CONTRIBUTIONS & LOVE NOTES -->
+      <section class="tab-pane" id="tabContributions">
+        <div class="pane-header">
+          <h3>Guest Contributions &amp; Messages</h3>
+          <span class="text-muted">All transfers and goodwill notes submitted by guests.</span>
+        </div>
+
+        <div class="admin-card">
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Guest Name</th>
+                  <th>Contact Info</th>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Method / Ref</th>
+                  <th>Love Note</th>
+                  <th>Status</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminContributionsTableBody">
+                <!-- Dynamically rendered -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: BANK & PAYMENT SETTINGS -->
+      <section class="tab-pane" id="tabBank">
+        <div class="settings-grid">
+          <!-- Bank Transfer Settings Card -->
+          <div class="admin-card settings-card">
+            <div class="card-title-bar">
+              <i class="fa-solid fa-building-columns"></i>
+              <h3>Bank Transfer Details</h3>
+            </div>
+            <p class="card-intro">These details are shown to guests when making direct bank transfers.</p>
+
+            <form id="bankSettingsForm" onsubmit="saveBankSettings(event)">
+              <div class="form-group">
+                <label for="setBankName">Bank Name</label>
+                <input type="text" id="setBankName" class="form-control" required placeholder="e.g. Guaranty Trust Bank (GTBank)">
+              </div>
+
+              <div class="form-group">
+                <label for="setAccountNumber">Account Number (10 Digits)</label>
+                <input type="text" id="setAccountNumber" class="form-control" required placeholder="e.g. 0123456789">
+              </div>
+
+              <div class="form-group">
+                <label for="setAccountName">Account Name</label>
+                <input type="text" id="setAccountName" class="form-control" required placeholder="e.g. Clara Napoleon Akpan &amp; Ezekiel Asuquo Ikoh">
+              </div>
+
+              <div class="form-group">
+                <label for="setInstructions">Transfer Narration / Instructions</label>
+                <textarea id="setInstructions" class="form-control" rows="3" placeholder="Narration guidelines for guests..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="setWhatsappPhone">WhatsApp Number for Confirmation (International format)</label>
+                <input type="text" id="setWhatsappPhone" class="form-control" placeholder="e.g. +2348012345678">
+                <small class="text-muted">Guests can click 1-button to send transfer receipt to this number.</small>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Save Bank Details
+              </button>
+            </form>
+          </div>
+
+          <!-- Paystack Gateway Integration Card -->
+          <div class="admin-card settings-card">
+            <div class="card-title-bar">
+              <i class="fa-solid fa-credit-card"></i>
+              <h3>Paystack Payment Gateway</h3>
+            </div>
+            <p class="card-intro">Integrate Paystack for online card, USSD, and Apple Pay payments.</p>
+
+            <form id="paystackSettingsForm" onsubmit="savePaystackSettings(event)">
+              <div class="form-group checkbox-group">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setPaystackEnabled">
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Enable Paystack Online Card Processing</span>
+              </div>
+
+              <div class="form-group">
+                <label for="setPaystackPublicKey">Paystack Public Key</label>
+                <input type="text" id="setPaystackPublicKey" class="form-control" placeholder="pk_live_... or pk_test_...">
+              </div>
+
+              <div class="form-group">
+                <label for="setPaystackSecretKey">Paystack Secret Key</label>
+                <input type="password" id="setPaystackSecretKey" class="form-control" placeholder="sk_live_... or sk_test_...">
+              </div>
+
+              <div class="form-group">
+                <label for="setPaystackNote">Guest Explainer Note</label>
+                <input type="text" id="setPaystackNote" class="form-control" placeholder="Note shown on checkout modal">
+              </div>
+
+              <div class="alert-box-info">
+                <i class="fa-solid fa-circle-question"></i>
+                <p>When disabled, the website cleanly defaults to the active <strong>Direct Bank Transfer</strong> flow.</p>
+              </div>
+
+              <button type="submit" class="btn btn-gold">
+                <i class="fa-solid fa-sliders"></i> Update Paystack Settings
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: WEDDING INFO & PIN SECURITY -->
+      <section class="tab-pane" id="tabWedding">
+        <div class="settings-grid">
+          <!-- Couple & Event Card -->
+          <div class="admin-card settings-card">
+            <div class="card-title-bar">
+              <i class="fa-solid fa-heart"></i>
+              <h3>Couple &amp; Ceremony Details</h3>
+            </div>
+
+            <form id="weddingSettingsForm" onsubmit="saveWeddingSettings(event)">
+              <div class="form-row">
+                <div class="form-group col">
+                  <label for="setBride">Bride's Full Name</label>
+                  <input type="text" id="setBride" class="form-control" required>
+                </div>
+                <div class="form-group col">
+                  <label for="setGroom">Groom's Full Name</label>
+                  <input type="text" id="setGroom" class="form-control" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col">
+                  <label for="setShortNames">Short Names (e.g. Clara &amp; Ezekiel)</label>
+                  <input type="text" id="setShortNames" class="form-control">
+                </div>
+                <div class="form-group col">
+                  <label for="setHashtag">Wedding Hashtag</label>
+                  <input type="text" id="setHashtag" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="setWeddingDate">Wedding Date &amp; Time</label>
+                <input type="datetime-local" id="setWeddingDate" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setChurchName">Church / Ceremony Venue</label>
+                <input type="text" id="setChurchName" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label for="setChurchAddress">Address / Location Details</label>
+                <input type="text" id="setChurchAddress" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label for="setStory">Welcome / Registry Greeting</label>
+                <textarea id="setStory" class="form-control" rows="4"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Save Ceremony Details
+              </button>
+            </form>
+          </div>
+
+          <!-- Security PIN Card -->
+          <div class="admin-card settings-card">
+            <div class="card-title-bar">
+              <i class="fa-solid fa-key"></i>
+              <h3>Admin Security PIN</h3>
+            </div>
+            <p class="card-intro">Change your administrator access PIN to keep your wedding management private.</p>
+
+            <form id="pinChangeForm" onsubmit="changeAdminPin(event)">
+              <div class="form-group">
+                <label for="newAdminPin">New 4-8 Digit Access PIN</label>
+                <input type="password" id="newAdminPin" class="form-control" required placeholder="Enter new PIN">
+              </div>
+
+              <div class="form-group">
+                <label for="confirmAdminPin">Confirm New PIN</label>
+                <input type="password" id="confirmAdminPin" class="form-control" required placeholder="Re-type new PIN">
+              </div>
+
+              <button type="submit" class="btn btn-gold">
+                <i class="fa-solid fa-shield-halved"></i> Update PIN
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Add / Edit Item -->
+  <div class="modal-backdrop" id="itemModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="itemModalTitle">Add New Registry Item</h3>
+        <button class="modal-close" onclick="closeItemModal()">&times;</button>
+      </div>
+
+      <form id="itemForm" onsubmit="handleItemSave(event)">
+        <input type="hidden" id="editItemId" value="">
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="itemTitle">Item Title *</label>
+            <input type="text" id="itemTitle" required placeholder="e.g. Double Door Refrigerator" class="form-control">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col">
+              <label class="form-label" for="itemCategory">Category *</label>
+              <select id="itemCategory" class="form-control" required>
+                <option value="Home Appliances">Home Appliances</option>
+                <option value="Kitchen">Kitchen</option>
+                <option value="Wedding Support">Wedding Support</option>
+                <option value="Cash Gifts">Cash Gifts</option>
+                <option value="Furniture">Furniture</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+
+            <div class="form-group col">
+              <label class="form-label" for="itemPrice">Target Price (₦ Naira)</label>
+              <input type="number" id="itemPrice" min="0" step="1000" placeholder="e.g. 150000 (0 for flexible cash)" class="form-control">
+              <small class="text-muted">Enter 0 for cash funds with no fixed ceiling.</small>
+            </div>
+          </div>
+
+          <!-- Image Selection & Upload -->
+          <div class="form-group">
+            <label class="form-label">Item Picture</label>
+            <div class="image-source-tabs">
+              <input type="text" id="itemImageUrl" placeholder="Image URL or choose preset below" class="form-control">
+              <div class="mt-2">
+                <label class="btn btn-sm btn-outline-dark upload-btn-label">
+                  <i class="fa-solid fa-upload"></i> Or Upload Image From Computer
+                  <input type="file" id="itemImageFileInput" accept="image/*" class="d-none" onchange="handleImageUpload(event)">
+                </label>
+                <span id="uploadFileName" class="text-muted ml-2"></span>
+              </div>
+            </div>
+
+            <!-- Quick presets -->
+            <div class="image-preset-picker mt-2">
+              <span class="preset-label">Quick Presets:</span>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/ac.jpg')">AC</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/cooker.jpg')">Cooker</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/airfryer.jpg')">Air Fryer</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/blender.jpg')">Blender</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/pots.jpg')">Pots</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/utensils.jpg')">Utensils</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/decor.jpg')">Decor</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/drinks.jpg')">Drinks</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/cash.jpg')">Cash</button>
+              <button type="button" class="img-chip" onclick="selectPresetImage('/images/plenty-cash.jpg')">Plenty Cash</button>
+            </div>
+
+            <!-- Preview box -->
+            <div class="image-preview-box mt-2">
+              <img id="imagePreview" src="/images/cash.jpg" alt="Preview">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="itemDescription">Description</label>
+            <textarea id="itemDescription" rows="3" placeholder="Brief note explaining the item..." class="form-control"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col">
+              <label class="form-label" for="itemStatus">Status</label>
+              <select id="itemStatus" class="form-control">
+                <option value="available">Available</option>
+                <option value="completed">Fully Funded / Completed</option>
+              </select>
+            </div>
+
+            <div class="form-group col">
+              <label class="form-label" for="itemRaised">Amount Raised So Far (₦)</label>
+              <input type="number" id="itemRaised" min="0" step="500" class="form-control" value="0">
+            </div>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-container">
+              <input type="checkbox" id="itemAllowPartial" checked>
+              <span class="checkmark"></span>
+              Allow Partial Contributions (Guests can contribute any fraction)
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer-btns">
+          <button type="button" class="btn btn-outline" onclick="closeItemModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveItemBtn">
+            <i class="fa-solid fa-check"></i> Save Item
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="adminToastContainer"></div>
+
+  <!-- Admin JavaScript -->
+  <script src="js/admin.js"></script>
+</body>
+</html>

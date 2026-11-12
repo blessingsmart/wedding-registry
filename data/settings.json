@@ -1,0 +1,25 @@
+{
+  "couple": {
+    "bride": "Clara Napoleon",
+    "groom": "Ezekiel Asuquo",
+    "shortNames": "Clara & Ezekiel",
+    "hashtag": "#ClaraEzekiel2026",
+    "weddingDate": "2026-12-29T10:00",
+    "venueName": "The Apostolic Church Nigeria",
+    "venueAddress": "Ekim Road, Opposite Ekim Primary School",
+    "story": "Welcome to our wedding registry! As we celebrate our union and step into our forever journey together, your love, prayers, and heartfelt support mean the world to us. If you wish to honor us with a gift or contribute towards our new beginning, you can browse through our wishlist or bless us with a cash gift. Thank you for celebrating with us!"
+  },
+  "bankTransfer": {
+    "bankName": "Access Bank",
+    "accountNumber": "0824256834",
+    "accountName": "Clara Napoleon",
+    "instructions": "Please transfer to the account above and use your Full Name or the Payment Reference as your transfer narration. After making your transfer, click 'I Have Made Transfer' to submit your confirmation and leave us a sweet note!",
+    "whatsappPhone": "+2348012345678"
+  },
+  "paystack": {
+    "enabled": false,
+    "publicKey": "pk_test_sample_key_here",
+    "note": "Paystack online payment will be enabled once your live API keys are inserted."
+  },
+  "adminPin": "2026"
+}
