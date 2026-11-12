@@ -1,7 +1,7 @@
 {
   "name": "clara-ezekiel-wedding-registry",
   "version": "1.0.0",
-  "description": "Wedding Registry and Gift Contribution Platform for Clara Napoleon Akpan & Ezekiel Asuquo Ikoh",
+  "description": "Wedding Registry and Gift Contribution Platform for Clara Napoleon & Ezekiel Ikoh",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

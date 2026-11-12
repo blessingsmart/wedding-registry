@@ -1,5 +1,5 @@
 # Clara & Ezekiel — Wedding Registry & Gift Fund Platform
-**In honor of Clara Napoleon Akpan & Ezekiel Asuquo Ikoh**
+**In honor of Clara Napoleon & Ezekiel Ikoh**
 *Wedding Ceremony: 29th December 2026*
 *Venue: The Apostolic Church Nigeria, Ekim Town District Headquarters, Ikot Abasi Field*
 
