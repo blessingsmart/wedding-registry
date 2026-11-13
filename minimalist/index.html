@@ -221,26 +221,24 @@
           </div>
         </div>
 
-        <!-- WhatsApp Notification Action -->
+        <!-- WhatsApp Quick Action -->
         <div class="gift-footer-actions">
-          <a href="https://wa.me/2348012345678?text=Hello%20Clara%20%26%20Ezekiel%2C%20I%20just%20sent%20a%20wedding%20cash%20gift.%20Congratulations%20on%20your%20holy%20matrimony!" 
-             target="_blank" 
-             rel="noopener noreferrer" 
-             class="btn-whatsapp-confirm">
-            <i class="fa-brands fa-whatsapp"></i> Confirm Gift on WhatsApp
+          <a href="#wishesCard" class="btn-whatsapp-confirm">
+            <i class="fa-brands fa-whatsapp"></i> Send Message / Receipt on WhatsApp
           </a>
         </div>
 
-        <!-- Heartfelt Prayers & Wishes Box -->
-        <div class="wishes-card">
+        <!-- Heartfelt Prayers & Wishes Box (Direct to WhatsApp) -->
+        <div class="wishes-card" id="wishesCard">
           <h4>Leave a Prayer or Sweet Note</h4>
-          <p>Send a congratulatory message directly to Clara &amp; Ezekiel</p>
+          <p>Send your prayers, congratulations, or gift confirmation directly to Clara &amp; Ezekiel on WhatsApp</p>
 
           <form id="wishesForm" class="wishes-form">
-            <input type="text" id="wishName" class="wishes-input" placeholder="Your Full Name" required>
+            <input type="text" id="wishName" class="wishes-input" placeholder="Your Full Name (Required)" required>
+            <input type="text" id="wishAmount" class="wishes-input" placeholder="Gift Amount or Transfer Reference (Optional)">
             <textarea id="wishMessage" class="wishes-input" rows="3" placeholder="Write your heartfelt prayers &amp; wishes for the couple..." required></textarea>
             <button type="submit" class="btn-send-wishes">
-              <i class="fa-solid fa-heart"></i> Send Warm Wishes
+              <i class="fa-brands fa-whatsapp"></i> Send to WhatsApp
             </button>
           </form>
         </div>

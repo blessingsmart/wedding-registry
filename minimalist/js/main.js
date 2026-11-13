@@ -3,6 +3,9 @@
    Vanilla JavaScript (No backend required)
    ========================================================= */
 
+// WhatsApp destination number (International format: country code + number, e.g. 2348012345678)
+const WHATSAPP_PHONE = '2348012345678';
+
 document.addEventListener('DOMContentLoaded', () => {
   initHeroSlider();
   initCountdown();
@@ -235,7 +238,7 @@ function initCalendarGenerator() {
 }
 
 /* =========================================================
-   5. SWEET NOTES & TOAST FEEDBACK
+   5. SWEET NOTES & WHATSAPP FORWARDING
    ========================================================= */
 function initWishesForm() {
   const form = document.getElementById('wishesForm');
@@ -244,9 +247,11 @@ function initWishesForm() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const nameInput = document.getElementById('wishName');
+    const amountInput = document.getElementById('wishAmount');
     const msgInput = document.getElementById('wishMessage');
 
     const name = nameInput.value.trim();
+    const amount = amountInput ? amountInput.value.trim() : '';
     const msg = msgInput.value.trim();
 
     if (!name || !msg) {
@@ -254,17 +259,33 @@ function initWishesForm() {
       return;
     }
 
-    // Launch confetti if library available
+    // Launch celebratory confetti
     if (typeof confetti === 'function') {
       confetti({
-        particleCount: 80,
-        spread: 60,
-        origin: { y: 0.8 },
+        particleCount: 90,
+        spread: 70,
+        origin: { y: 0.7 },
         colors: ['#6B1D2F', '#B76E79', '#C5A059', '#FAF7F2']
       });
     }
 
-    showToast(`Thank you, ${name}! Your warm wishes have been sent to Clara & Ezekiel 💖`);
+    // Format message for WhatsApp
+    let whatsappText = `🌸 *Wedding Wishes for Clara & Ezekiel* 🌸\n\n`;
+    whatsappText += `👤 *From:* ${name}\n`;
+    if (amount) {
+      whatsappText += `🎁 *Gift / Ref:* ${amount}\n`;
+    }
+    whatsappText += `\n💬 *Message & Prayers:*\n"${msg}"\n\n`;
+    whatsappText += `✨ *Congratulations on your Holy Matrimony!* 🥂💍`;
+
+    const whatsappUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(whatsappText)}`;
+
+    showToast(`Redirecting to WhatsApp to send your message to Clara & Ezekiel... 💬`);
+
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank');
+    }, 1000);
+
     form.reset();
   });
 }
