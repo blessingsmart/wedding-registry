@@ -1,6 +1,13 @@
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config();
+
+// Load environment variables (.env locally or /etc/secrets/.env on Render)
+if (fs.existsSync(path.join(__dirname, '.env'))) {
+  require('dotenv').config({ path: path.join(__dirname, '.env'), quiet: true });
+}
+if (fs.existsSync('/etc/secrets/.env')) {
+  require('dotenv').config({ path: '/etc/secrets/.env', quiet: true });
+}
 
 // File paths for local JSON fallback
 const DATA_DIR = path.join(__dirname, 'data');
@@ -33,49 +40,103 @@ function writeJSON(file, data) {
   }
 }
 
+/**
+ * Flexible environment variable getter:
+ * Checks direct key, alternate keys, and case-insensitive matches.
+ * Also strips surrounding quotes and whitespace.
+ */
+function getEnvValue(...candidateKeys) {
+  // 1. Direct match
+  for (const key of candidateKeys) {
+    if (process.env[key] !== undefined && process.env[key] !== '') {
+      return String(process.env[key]).trim().replace(/^['"]|['"]$/g, '');
+    }
+  }
+
+  // 2. Case-insensitive / normalized match (e.g. db_host, Db_Host, DBHOST)
+  const envKeys = Object.keys(process.env);
+  for (const key of candidateKeys) {
+    const normTarget = key.toLowerCase().replace(/[-_]/g, '');
+    const found = envKeys.find(k => k.toLowerCase().replace(/[-_]/g, '') === normTarget);
+    if (found && process.env[found] !== undefined && process.env[found] !== '') {
+      return String(process.env[found]).trim().replace(/^['"]|['"]$/g, '');
+    }
+  }
+
+  return '';
+}
+
 let pool = null;
 let isConnected = false;
-
-// Check if MySQL credentials are provided
-const hasMySQLConfig = Boolean(
-  process.env.DB_HOST &&
-  process.env.DB_NAME &&
-  process.env.DB_USER
-);
-
-if (hasMySQLConfig) {
-  try {
-    const mysql = require('mysql2/promise');
-    pool = mysql.createPool({
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10) || 3306,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME,
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-      enableKeepAlive: true,
-      keepAliveInitialDelay: 10000,
-      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined
-    });
-  } catch (err) {
-    console.error('Failed to initialize MySQL pool, falling back to JSON:', err.message);
-  }
-}
 
 /**
  * Initialize DB: Create tables and seed from JSON files if tables are empty.
  */
 async function initDb() {
-  if (!pool) {
-    console.log('ℹ️ Using local JSON file storage (No DB_HOST provided).');
+  const dbUrl = getEnvValue('DATABASE_URL', 'MYSQL_URL', 'JAWSDB_URL', 'CLEARDB_DATABASE_URL');
+  const dbHost = getEnvValue('DB_HOST', 'MYSQL_HOST', 'DATABASE_HOST', 'DBHOST');
+  const dbName = getEnvValue('DB_NAME', 'MYSQL_DATABASE', 'DATABASE_NAME', 'DBNAME');
+  const dbUser = getEnvValue('DB_USER', 'MYSQL_USER', 'DATABASE_USER', 'DBUSER');
+  const dbPass = getEnvValue('DB_PASSWORD', 'DB_PASS', 'MYSQL_PASSWORD', 'DATABASE_PASSWORD', 'DBPASSWORD');
+  const dbPortStr = getEnvValue('DB_PORT', 'MYSQL_PORT', 'DATABASE_PORT', 'DBPORT');
+  const dbPort = parseInt(dbPortStr, 10) || 3306;
+  const dbSsl = getEnvValue('DB_SSL');
+
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('🔍 Database Configuration Check:');
+  if (dbUrl) {
+    console.log('  - DATABASE_URL: Provided (will connect via URL)');
+  } else {
+    console.log('  - Host:    ', dbHost ? `"${dbHost}"` : '❌ NOT FOUND');
+    console.log('  - Port:    ', dbPort);
+    console.log('  - Database:', dbName ? `"${dbName}"` : '❌ NOT FOUND');
+    console.log('  - User:    ', dbUser ? `"${dbUser}"` : '❌ NOT FOUND');
+    console.log('  - Password:', dbPass ? '****** (provided)' : '❌ NOT PROVIDED');
+  }
+
+  const hasConfig = Boolean(dbUrl || (dbHost && dbName && dbUser));
+
+  if (!hasConfig) {
+    console.log('ℹ️ Using local JSON file storage (No database credentials found in environment).');
+    console.log('👉 Tip for Render: In your Web Service -> "Environment" tab:');
+    console.log('   Add: DB_HOST, DB_NAME, DB_USER, DB_PASSWORD');
+    console.log('   Make sure to click the blue "Save Changes" button at the bottom!');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     return false;
   }
 
   try {
+    const mysql = require('mysql2/promise');
+
+    const poolConfig = dbUrl
+      ? {
+          uri: dbUrl,
+          waitForConnections: true,
+          connectionLimit: 10,
+          queueLimit: 0,
+          enableKeepAlive: true,
+          keepAliveInitialDelay: 10000,
+          ssl: dbSsl === 'true' ? { rejectUnauthorized: false } : undefined
+        }
+      : {
+          host: dbHost,
+          port: dbPort,
+          user: dbUser,
+          password: dbPass,
+          database: dbName,
+          waitForConnections: true,
+          connectionLimit: 10,
+          queueLimit: 0,
+          enableKeepAlive: true,
+          keepAliveInitialDelay: 10000,
+          ssl: dbSsl === 'true' ? { rejectUnauthorized: false } : undefined
+        };
+
+    pool = mysql.createPool(poolConfig);
+
+    console.log(`🔌 Connecting to MySQL database at ${dbHost || dbUrl}:${dbPort}...`);
     const conn = await pool.getConnection();
-    console.log(`✅ Connected to MySQL database (${process.env.DB_NAME} at ${process.env.DB_HOST})`);
+    console.log(`✅ Successfully connected to Alwaysdata MySQL database (${dbName || 'connected'})!`);
 
     // 1. Settings Table
     await conn.query(`
@@ -128,7 +189,7 @@ async function initDb() {
     // --- Auto-Seed Settings if empty ---
     const [settingsRows] = await conn.query('SELECT id FROM site_settings WHERE id = 1');
     if (settingsRows.length === 0) {
-      console.log('🌱 Seeding initial settings to MySQL database...');
+      console.log('🌱 Seeding initial settings into MySQL database...');
       const defaultSettings = readJSON(SETTINGS_FILE, {});
       await conn.query(
         'INSERT INTO site_settings (id, config) VALUES (1, ?)',
@@ -139,7 +200,7 @@ async function initDb() {
     // --- Auto-Seed Items if empty ---
     const [itemRows] = await conn.query('SELECT COUNT(*) AS count FROM registry_items');
     if (itemRows[0].count === 0) {
-      console.log('🌱 Seeding initial registry items to MySQL database...');
+      console.log('🌱 Seeding initial 10 registry items into MySQL database...');
       const defaultItems = readJSON(ITEMS_FILE, []);
       let order = 1;
       for (const it of defaultItems) {
@@ -193,11 +254,15 @@ async function initDb() {
 
     conn.release();
     isConnected = true;
+    console.log('🎉 Database ready and fully synchronized!');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     return true;
   } catch (err) {
     console.error('❌ Failed to connect to MySQL database:', err.message);
     console.log('⚠️ Falling back to local JSON file storage.');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     isConnected = false;
+    pool = null;
     return false;
   }
 }
@@ -228,7 +293,6 @@ async function saveSettings(settings) {
         'INSERT INTO site_settings (id, config) VALUES (1, ?) ON DUPLICATE KEY UPDATE config = ?',
         [jsonStr, jsonStr]
       );
-      // Also write to local file as backup
       writeJSON(SETTINGS_FILE, settings);
       return true;
     } catch (err) {
@@ -437,7 +501,6 @@ async function addContribution(contrib) {
         contrib.date || new Date().toISOString()
       ]);
 
-      // If tied to an item, update raised amount
       if (contrib.itemId && contrib.itemId !== 'cash_fund' && contrib.itemId !== 'plenty_cash') {
         const item = await getItemById(contrib.itemId);
         if (item) {

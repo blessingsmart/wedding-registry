@@ -1,8 +1,13 @@
-require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+if (fs.existsSync(path.join(__dirname, '.env'))) {
+  require('dotenv').config({ path: path.join(__dirname, '.env'), quiet: true });
+}
+if (fs.existsSync('/etc/secrets/.env')) {
+  require('dotenv').config({ path: '/etc/secrets/.env', quiet: true });
+}
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
 const multer = require('multer');
 const db = require('./db');
 
