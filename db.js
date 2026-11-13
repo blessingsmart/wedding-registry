@@ -74,10 +74,10 @@ let isConnected = false;
  */
 async function initDb() {
   const dbUrl = getEnvValue('DATABASE_URL', 'MYSQL_URL', 'JAWSDB_URL', 'CLEARDB_DATABASE_URL');
-  const dbHost = getEnvValue('DB_HOST', 'MYSQL_HOST', 'DATABASE_HOST', 'DBHOST');
-  const dbName = getEnvValue('DB_NAME', 'MYSQL_DATABASE', 'DATABASE_NAME', 'DBNAME');
-  const dbUser = getEnvValue('DB_USER', 'MYSQL_USER', 'DATABASE_USER', 'DBUSER');
-  const dbPass = getEnvValue('DB_PASSWORD', 'DB_PASS', 'MYSQL_PASSWORD', 'DATABASE_PASSWORD', 'DBPASSWORD');
+  const dbHost = getEnvValue('DB_HOST', 'MYSQL_HOST', 'DATABASE_HOST', 'DBHOST') || 'mysql-hyipdb.alwaysdata.net';
+  const dbName = getEnvValue('DB_NAME', 'MYSQL_DATABASE', 'DATABASE_NAME', 'DBNAME') || 'hyipdb_wedding';
+  const dbUser = getEnvValue('DB_USER', 'MYSQL_USER', 'DATABASE_USER', 'DBUSER') || 'hyipdb';
+  const dbPass = getEnvValue('DB_PASSWORD', 'DB_PASS', 'MYSQL_PASSWORD', 'DATABASE_PASSWORD', 'DBPASSWORD') || 'hyipdb_crypto_hyip_pro1313';
   const dbPortStr = getEnvValue('DB_PORT', 'MYSQL_PORT', 'DATABASE_PORT', 'DBPORT');
   const dbPort = parseInt(dbPortStr, 10) || 3306;
   const dbSsl = getEnvValue('DB_SSL');
