@@ -3,8 +3,8 @@
    Vanilla JavaScript (No backend required)
    ========================================================= */
 
-// WhatsApp destination number (International format: country code + number, e.g. 2348012345678)
-const WHATSAPP_PHONE = '2348012345678';
+// WhatsApp destination number (International format: country code + number, e.g. 2349069068735)
+const WHATSAPP_PHONE = '2349069068735';
 
 document.addEventListener('DOMContentLoaded', () => {
   initHeroSlider();

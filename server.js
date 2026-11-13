@@ -370,11 +370,12 @@ app.post('/api/paystack/verify/:reference', async (req, res) => {
   }
 });
 
-// Serve minimalist static version on /minimal
-app.use('/minimal', express.static(path.join(__dirname, 'minimalist')));
-app.get('/minimal', (req, res) => {
-  res.sendFile(path.join(__dirname, 'minimalist', 'index.html'));
-});
+// Serve standalone static version on /ce2026 and /minimal
+const ceDir = path.join(__dirname, 'ce2026');
+app.use('/ce2026', express.static(ceDir));
+app.get('/ce2026', (req, res) => res.sendFile(path.join(ceDir, 'index.html')));
+app.use('/minimal', express.static(ceDir));
+app.get('/minimal', (req, res) => res.sendFile(path.join(ceDir, 'index.html')));
 
 // Serve admin page on /admin
 app.get('/admin', (req, res) => {
