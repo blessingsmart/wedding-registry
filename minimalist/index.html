@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clara & Ezekiel — Wedding Celebration & Cash Gift</title>
+  <meta name="description" content="Wedding celebration and cash gift fund for Clara Napoleon and Ezekiel Ikoh. Tuesday, 29th December 2026.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Minimalist Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Minimalist Top Navigation -->
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="#hero" class="nav-brand">
+        <span class="monogram">C &amp; E</span>
+        <span class="date-tiny">29.12.2026</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#countdown">Countdown</a>
+        <a href="#details">Date &amp; Venue</a>
+        <a href="#gift">Cash Gift</a>
+      </nav>
+
+      <a href="#gift" class="btn-nav">Send a Gift</a>
+    </div>
+  </header>
+
+  <!-- Big Hero Image Auto-Scrolling Slider -->
+  <section class="hero-section" id="hero">
+    <div class="hero-slider" id="heroSlider">
+      <div class="hero-slide active" style="background-image: url('images/couple-1.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('images/couple-2.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('images/couple-3.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('images/couple-4.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('images/couple-5.jpg');"></div>
+      <div class="hero-slide" style="background-image: url('images/couple-6.jpg');"></div>
+    </div>
+
+    <!-- Soft Overlay -->
+    <div class="hero-overlay"></div>
+
+    <!-- Floating Hero Content -->
+    <div class="hero-content">
+      <span class="hero-knot">∞</span>
+      <span class="hero-eyebrow">THE WEDDING CELEBRATION OF</span>
+      <h1 class="hero-names">Clara <span class="amp">&amp;</span> Ezekiel</h1>
+
+      <div class="hero-date-line">
+        <span>Tuesday, 29th December 2026</span>
+        <span class="dot">✦</span>
+        <span>Ekim Town, Nigeria</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#gift" class="btn-hero-primary">
+          <i class="fa-solid fa-gift"></i> Bless With a Cash Gift
+        </a>
+        <a href="#details" class="btn-hero-secondary">
+          <i class="fa-regular fa-calendar-check"></i> Wedding Details
+        </a>
+      </div>
+    </div>
+
+    <!-- Auto-scrolling Slider Dots -->
+    <div class="slider-pagination" id="sliderPagination"></div>
+  </section>
+
+  <!-- Live Countdown Timer -->
+  <section class="countdown-section" id="countdown">
+    <div class="container container-narrow countdown-wrap">
+      <span class="section-eyebrow">COUNTING DOWN TO OUR FOREVER</span>
+      <h2 class="section-title">Save The Date</h2>
+
+      <div class="countdown-grid">
+        <div class="countdown-box">
+          <span class="countdown-number" id="cdDays">00</span>
+          <span class="countdown-label">Days</span>
+        </div>
+        <span class="countdown-separator">:</span>
+
+        <div class="countdown-box">
+          <span class="countdown-number" id="cdHours">00</span>
+          <span class="countdown-label">Hours</span>
+        </div>
+        <span class="countdown-separator">:</span>
+
+        <div class="countdown-box">
+          <span class="countdown-number" id="cdMins">00</span>
+          <span class="countdown-label">Minutes</span>
+        </div>
+        <span class="countdown-separator">:</span>
+
+        <div class="countdown-box">
+          <span class="countdown-number" id="cdSecs">00</span>
+          <span class="countdown-label">Seconds</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Limited Details: Date & Location -->
+  <section class="details-section" id="details">
+    <div class="container">
+      <span class="section-eyebrow">WHERE &amp; WHEN</span>
+      <h2 class="section-title">Celebration Details</h2>
+      <div class="divider-line"></div>
+
+      <div class="details-grid">
+        <!-- Date Card -->
+        <div class="detail-card">
+          <div>
+            <div class="detail-icon-wrap">
+              <i class="fa-regular fa-calendar-days"></i>
+            </div>
+            <h3 class="detail-heading">Date &amp; Time</h3>
+            <p class="detail-primary-text">Tuesday, 29th December 2026</p>
+            <p class="detail-secondary-text">
+              Ceremony begins at 10:00 AM Prompt.<br>
+              Wedding reception to follow immediately.
+            </p>
+          </div>
+          <a href="#" id="btnAddToCalendar" class="btn-card-action">
+            <i class="fa-regular fa-calendar-plus"></i> Add to Calendar
+          </a>
+        </div>
+
+        <!-- Venue Card -->
+        <div class="detail-card">
+          <div>
+            <div class="detail-icon-wrap">
+              <i class="fa-solid fa-church"></i>
+            </div>
+            <h3 class="detail-heading">Ceremony &amp; Venue</h3>
+            <p class="detail-primary-text">The Apostolic Church Nigeria</p>
+            <p class="detail-secondary-text">
+              Ikot Abasi Field, Ekim Town District Headquarters<br>
+              Ekim Road, Opposite Ekim Primary School
+            </p>
+          </div>
+          <a href="https://maps.google.com/?q=The+Apostolic+Church+Nigeria+Ekim+Town" target="_blank" rel="noopener noreferrer" class="btn-card-action">
+            <i class="fa-solid fa-map-location-dot"></i> View on Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cash Gift Only Section -->
+  <section class="gift-section" id="gift">
+    <div class="container container-narrow">
+      <div class="gift-card-main">
+        <div class="gift-icon-top">
+          <i class="fa-solid fa-hand-holding-dollar"></i>
+        </div>
+
+        <span class="section-eyebrow">BLESS THE COUPLE</span>
+        <h2 class="section-title">Wedding Cash Gift</h2>
+        
+        <p class="gift-message">
+          "Your presence, love, and prayers are the greatest blessing to our union. 
+          If you wish to honor our new home and journey with a monetary gift, please find our direct account details below."
+        </p>
+
+        <!-- Currency Switcher Tabs -->
+        <div class="currency-tabs">
+          <button type="button" class="tab-btn active" data-currency="usd">
+            <i class="fa-solid fa-dollar-sign"></i> US Dollar (USD)
+          </button>
+          <button type="button" class="tab-btn" data-currency="ngn">
+            <i class="fa-solid fa-naira-sign"></i> Nigerian Naira (NGN)
+          </button>
+        </div>
+
+        <!-- Bank Details Card -->
+        <div class="bank-account-box">
+          <div class="account-row">
+            <span class="account-label">Bank Name</span>
+            <span class="account-val" id="dispBankName">Lead Bank</span>
+          </div>
+
+          <div class="account-row">
+            <span class="account-label">Account Name</span>
+            <span class="account-val" id="dispAccName">Clara Napoleon</span>
+          </div>
+
+          <div class="account-row">
+            <span class="account-label">Account Number</span>
+            <div class="account-num-group">
+              <span class="account-num-val" id="dispAccNum">214340084641</span>
+              <button type="button" class="btn-copy-micro" id="btnCopyMicro" onclick="copyAccountNumber()">
+                <i class="fa-regular fa-copy"></i> <span id="copyBtnText">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="account-row">
+            <span class="account-label">Account Type</span>
+            <span class="account-val" id="dispAccType">Checking</span>
+          </div>
+
+          <div class="account-row">
+            <span class="account-label">Note / Memo</span>
+            <span class="account-val" style="font-size: 0.9rem; color: var(--text-muted);" id="dispInstructions">
+              Please use your Full Name as wire / ACH transfer memo.
+            </span>
+          </div>
+        </div>
+
+        <!-- WhatsApp Notification Action -->
+        <div class="gift-footer-actions">
+          <a href="https://wa.me/2348012345678?text=Hello%20Clara%20%26%20Ezekiel%2C%20I%20just%20sent%20a%20wedding%20cash%20gift.%20Congratulations%20on%20your%20holy%20matrimony!" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="btn-whatsapp-confirm">
+            <i class="fa-brands fa-whatsapp"></i> Confirm Gift on WhatsApp
+          </a>
+        </div>
+
+        <!-- Heartfelt Prayers & Wishes Box -->
+        <div class="wishes-card">
+          <h4>Leave a Prayer or Sweet Note</h4>
+          <p>Send a congratulatory message directly to Clara &amp; Ezekiel</p>
+
+          <form id="wishesForm" class="wishes-form">
+            <input type="text" id="wishName" class="wishes-input" placeholder="Your Full Name" required>
+            <textarea id="wishMessage" class="wishes-input" rows="3" placeholder="Write your heartfelt prayers &amp; wishes for the couple..." required></textarea>
+            <button type="submit" class="btn-send-wishes">
+              <i class="fa-solid fa-heart"></i> Send Warm Wishes
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Minimalist Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-monogram">C &amp; E</div>
+      <p class="footer-names">Clara Napoleon &amp; Ezekiel Ikoh</p>
+      <p class="footer-date">29th December 2026 • The Apostolic Church Nigeria, Ekim Town</p>
+      <p class="footer-credit">With love and gratitude to God Almighty &copy; 2026</p>
+    </div>
+  </footer>
+
+  <!-- Vanilla JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html>
